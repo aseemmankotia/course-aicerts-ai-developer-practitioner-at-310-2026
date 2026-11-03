@@ -1,0 +1,16 @@
+## Chapter 10: Domain 10: Retrieval-Augmented Generation and Knowledge Assistants — Flashcards
+
+| # | Front (Question) | Back (Answer) |
+|---|-----------------|---------------|
+| 1 | What is the valid range of cosine similarity values? | -1 to 1. 1 = identical direction (max similarity), 0 = orthogonal/unrelated, -1 = opposite direction. Exam tip: a high positive value (e.g., 0.8-1.0) indicates strong semantic similarity. |
+| 2 | Typical RAG chunk size and overlap recommendation | Roughly 300-1000 tokens per chunk with 10-20% overlap between adjacent chunks. Exact values depend on document type, but overlap prevents losing content split at chunk boundaries. |
+| 3 | Embedding-based similarity search vs keyword (BM25) search — when to use which? | Use embedding-based search when matching meaning despite different wording (synonyms, paraphrases). Use keyword/BM25 search when exact term matches or rare technical identifiers matter most. |
+| 4 | FAISS/Chroma-style vector stores — what role do they play? | They index document embeddings and perform fast nearest-neighbor similarity search, returning the top-k most similar chunks to a query vector. This is the 'retrieve' step of RAG. |
+| 5 | What are the three stages of the RAG pipeline? | Retrieve (find relevant chunks via similarity search) → Augment (insert chunks into the prompt) → Generate (LLM produces the answer using the augmented prompt). |
+| 6 | Why does chunk size affect retrieval quality? | Chunks too large dilute the embedding with multiple topics, lowering precision. Chunks too small lose surrounding context needed to answer fully. Exam tip: balance size against document structure (e.g., paragraphs, procedural steps). |
+| 7 | What is 'grounding' in a RAG system? | Constraining the LLM to base its answer only on retrieved context (often with citations and an 'I don't know' fallback), reducing hallucination compared to relying on the model's parametric knowledge. |
+| 8 | Why add overlap between chunks? | Overlap ensures content near a chunk boundary (e.g., a procedural step split across two chunks) appears intact in at least one chunk, preventing lost context during retrieval. |
+| 9 | Name a technique to reduce RAG hallucination besides grounding instructions. | Lowering LLM temperature, citing sources in the answer, and restricting the model to say it doesn't know when retrieved context is insufficient — all reduce fabricated content. |
+| 10 | Faithfulness vs relevance in RAG evaluation | Faithfulness (groundedness) measures whether the answer's claims are supported by retrieved context. Relevance measures whether the answer actually addresses the user's question. A RAG answer can be relevant but not faithful (hallucinated) or faithful but not relevant. |
+| 11 | Cosine similarity formula (conceptual) | cosine_similarity(A,B) = (A · B) / (\|\|A\|\| * \|\|B\|\|) — the dot product of two vectors divided by the product of their magnitudes. Used to rank chunks by semantic closeness to a query embedding. |
+| 12 | Typical vector store query call pattern | index.search(query_vector, k) — returns the top-k nearest chunk vectors (and their IDs/scores) to the query embedding. 'k' controls how many chunks get passed to the augment step. |
